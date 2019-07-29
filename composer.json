@@ -1,0 +1,28 @@
+{
+    "name": "ashallendesign/coinverter",
+    "description": "A wrapper package for interacting with currency conversion APIs.",
+    "type": "library",
+    "require": {
+        "nesbot/carbon": "~2.0",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ash Allen",
+            "email": "mail@ashallendesign.co.uk"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "AshAllenDesign\\CurrencyConverter\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "AshAllenDesign\\Coinverter\\Providers\\CoinverterServiceProvider"
+            ]
+        }
+    }
+}
