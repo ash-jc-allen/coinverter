@@ -1,5 +1,8 @@
 # Coinverter
 
+<p align="center"><img src="./coinverter.png)</p>
+
+
 ## Introduction
 Coinverter is a simple Laravel package built to interact with currency conversion APIs.
 
