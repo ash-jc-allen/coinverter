@@ -47,7 +47,7 @@ After doing so, you will then be able to use the ``` Coinverter ``` facade.
 
 ## Usage
 The package is built using the adapter pattern so that in the near future it will be much more extendable and support many more
-APIs and services. Therefore, it is best practice when using this package to either instantiate the CurrencyConverter object using
+APIs and services. Therefore, it is best practice when using this package to either instantiate the Coinverter object using
 dependency injection or the facade.
 
 ## Examples

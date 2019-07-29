@@ -2,7 +2,7 @@
 
 namespace AshAllenDesign\Coinverter;
 
-use AshAllenDesign\CurrencyConverter\Contracts\Coinverter;
+use AshAllenDesign\Coinverter\Contracts\Coinverter;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 

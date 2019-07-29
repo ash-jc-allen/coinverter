@@ -2,7 +2,7 @@
 
 namespace AshAllenDesign\Coinverter;
 
-use AshAllenDesign\CurrencyConverter\Contracts\Coinverter;
+use AshAllenDesign\Coinverter\Contracts\Coinverter;
 use GuzzleHttp\Client;
 use Carbon\Carbon;
 
@@ -28,7 +28,7 @@ class CoinverterApiAdapter implements Coinverter
      */
     public function __construct(Client $client = null, string $apiKey = null)
     {
-        $this->API_KEY = $apiKey ?? config('currency-converter.currencyconverterapi.api-key');
+        $this->API_KEY = $apiKey ?? config('coinverter.currencyconverterapi.api-key');
         $this->ACCOUNT_TYPE = $this->determineAccountType();
         $this->BASE_URL = $this->determineBaseUrl();
 
@@ -41,11 +41,11 @@ class CoinverterApiAdapter implements Coinverter
      */
     private function determineAccountType()
     {
-        if (config('currency-converter.currencyconverterapi.account-type') == 'free') {
+        if (config('coinverter.currencyconverterapi.account-type') == 'free') {
             return 'free';
         }
 
-        if (config('currency-converter.currencyconverterapi.account-type') == 'pro') {
+        if (config('coinverter.currencyconverterapi.account-type') == 'pro') {
             return 'pr';
         }
 
@@ -58,11 +58,11 @@ class CoinverterApiAdapter implements Coinverter
      */
     private function determineBaseUrl()
     {
-        if (config('currency-converter.currencyconverterapi.account-type') == 'free') {
+        if (config('coinverter.currencyconverterapi.account-type') == 'free') {
             return 'https://free.currconv.com/api/v7';
         }
 
-        if (config('currency-converter.currencyconverterapi.account-type') == 'pro') {
+        if (config('coinverter.currencyconverterapi.account-type') == 'pro') {
             return 'https://api.currconv.com/api/v7';
         }
 
