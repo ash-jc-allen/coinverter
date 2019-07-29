@@ -15,7 +15,7 @@ return [
     | 'exchangeratesapi'     => https://exchangeratesapi.io/
     |
     */
-    'driver'               => env('CURRENCY_CONVERTER_DRIVER'),
+    'driver'               => env('COINVERTER_DRIVER'),
 
 
     /*
