@@ -3,8 +3,8 @@
 namespace AshAllenDesign\Coinverter;
 
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
-use GuzzleHttp\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 class CoinverterApiAdapter implements Coinverter
 {
@@ -77,8 +77,7 @@ class CoinverterApiAdapter implements Coinverter
     {
         $response = $this->makeRequest('/currencies');
 
-        foreach($response->results as $currency => $metaData)
-        {
+        foreach ($response->results as $currency => $metaData) {
             $currencies[] = $currency;
         }
 
@@ -93,7 +92,7 @@ class CoinverterApiAdapter implements Coinverter
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
-        $conversion = $from . '_' . $to;
+        $conversion = $from.'_'.$to;
         $date = $date ? $date->format('Y-m-d') : now()->format('Y-m-d');
 
         $response = $this->makeRequest('/convert', [
@@ -117,7 +116,7 @@ class CoinverterApiAdapter implements Coinverter
     {
         $this->validateDateRange($date, $endDate);
 
-        $conversion = $from . '_' . $to;
+        $conversion = $from.'_'.$to;
 
         return $this->makeRequest('/convert', [
             'q'       => $conversion,
@@ -164,10 +163,10 @@ class CoinverterApiAdapter implements Coinverter
      */
     private function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->BASE_URL . $path . '?apiKey=' . $this->API_KEY;
+        $url = $this->BASE_URL.$path.'?apiKey='.$this->API_KEY;
 
         foreach ($queryParams as $param => $value) {
-            $url .= '&' . urlencode($param) . '=' . urlencode($value);
+            $url .= '&'.urlencode($param).'='.urlencode($value);
         }
 
         return json_decode($this->client->get($url)->getBody()->getContents());

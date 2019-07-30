@@ -17,7 +17,6 @@ return [
     */
     'driver'               => env('COINVERTER_DRIVER'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Currency Converter API (https://www.currencyconverterapi.com/)
