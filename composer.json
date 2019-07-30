@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "nesbot/carbon": "~2.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3",
+        "moneyphp/money": "^3.2"
     },
     "license": "MIT",
     "authors": [
