@@ -3,8 +3,11 @@
 namespace AshAllenDesign\Coinverter;
 
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
-use Carbon\Carbon;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Currencies\ISOCurrencies;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+use Money\Money;
 
 class ExchangeRatesApiAdapter implements Coinverter
 {
@@ -43,15 +46,15 @@ class ExchangeRatesApiAdapter implements Coinverter
     }
 
     /**
-     * @param string      $from
-     * @param string      $to
+     * @param string $from
+     * @param string $to
      * @param Carbon|null $date
      * @return mixed
      */
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
         return $date
-            ? $this->makeRequest('/'.$date->format('Y-m-d'), ['base' => $from])->rates->$to
+            ? $this->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])->rates->$to
             : $this->makeRequest('/latest', ['base' => $from])->rates->$to;
     }
 
@@ -60,17 +63,17 @@ class ExchangeRatesApiAdapter implements Coinverter
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array  $conversions
+     * @param array $conversions
      * @return mixed
      * @throws \Exception
      */
     public function exchangeRateBetweenDateRange(string $from, string $to, Carbon $date, Carbon $endDate, $conversions = [])
     {
         $result = $this->makeRequest('/history', [
-            'base'     => $from,
+            'base' => $from,
             'start_at' => $date->format('Y-m-d'),
-            'end_at'   => $endDate->format('Y-m-d'),
-            'symbols'  => $to,
+            'end_at' => $endDate->format('Y-m-d'),
+            'symbols' => $to,
         ]);
 
         foreach ($result->rates as $date => $rate) {
@@ -81,31 +84,34 @@ class ExchangeRatesApiAdapter implements Coinverter
     }
 
     /**
-     * @param float       $value
-     * @param string      $from
-     * @param string      $to
+     * @param string $value
+     * @param string $from
+     * @param string $to
      * @param Carbon|null $date
      * @return float|int
      */
-    public function convert(float $value, string $from, string $to, Carbon $date = null)
+    public function convert(string $value, string $from, string $to, Carbon $date = null)
     {
-        return $value * $this->exchangeRate($from, $to, $date);
+        $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
+
+        return (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
     }
 
     /**
-     * @param float  $value
+     * @param string $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
      * @param Carbon $endDate
-     * @param array  $conversions
+     * @param array $conversions
      * @return array
      * @throws \Exception
      */
-    public function convertBetweenDateRange(float $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
+    public function convertBetweenDateRange(string $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
     {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = $value * $exchangeRate;
+            $result = Money::{$from}($value)->multiply($exchangeRate);
+            $conversions[$date] = (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
 
         return $conversions;
@@ -113,15 +119,15 @@ class ExchangeRatesApiAdapter implements Coinverter
 
     /**
      * @param string $path
-     * @param array  ...$queryParams
+     * @param array ...$queryParams
      * @return mixed
      */
     private function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->BASE_URL.$path.'?';
+        $url = $this->BASE_URL . $path . '?';
 
         foreach ($queryParams as $param => $value) {
-            $url .= '&'.urlencode($param).'='.urlencode($value);
+            $url .= '&' . urlencode($param) . '=' . urlencode($value);
         }
 
         return json_decode($this->client->get($url)->getBody()->getContents());
