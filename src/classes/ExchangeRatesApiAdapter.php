@@ -3,8 +3,8 @@
 namespace AshAllenDesign\Coinverter;
 
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
-use GuzzleHttp\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 class ExchangeRatesApiAdapter implements Coinverter
 {
@@ -51,7 +51,7 @@ class ExchangeRatesApiAdapter implements Coinverter
     public function exchangeRate(string $from, string $to, Carbon $date = null)
     {
         return $date
-            ? $this->makeRequest('/' . $date->format('Y-m-d'), ['base' => $from])->rates->$to
+            ? $this->makeRequest('/'.$date->format('Y-m-d'), ['base' => $from])->rates->$to
             : $this->makeRequest('/latest', ['base' => $from])->rates->$to;
     }
 
@@ -118,10 +118,10 @@ class ExchangeRatesApiAdapter implements Coinverter
      */
     private function makeRequest(string $path, array $queryParams = [])
     {
-        $url = $this->BASE_URL . $path . '?';
+        $url = $this->BASE_URL.$path.'?';
 
         foreach ($queryParams as $param => $value) {
-            $url .= '&' . urlencode($param) . '=' . urlencode($value);
+            $url .= '&'.urlencode($param).'='.urlencode($value);
         }
 
         return json_decode($this->client->get($url)->getBody()->getContents());

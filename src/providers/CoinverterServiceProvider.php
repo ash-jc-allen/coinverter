@@ -2,9 +2,9 @@
 
 namespace AshAllenDesign\Coinverter\Providers;
 
-use AshAllenDesign\Coinverter\ExchangeRatesApiAdapter;
-use AshAllenDesign\Coinverter\Contracts\Coinverter;
 use AshAllenDesign\Coinverter\CoinverterApiAdapter;
+use AshAllenDesign\Coinverter\Contracts\Coinverter;
+use AshAllenDesign\Coinverter\ExchangeRatesApiAdapter;
 use Illuminate\Support\ServiceProvider;
 
 class CoinverterServiceProvider extends ServiceProvider
@@ -16,11 +16,11 @@ class CoinverterServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(Coinverter::class, function($app) {
-            switch($app->make('config')->get('coinverter.driver')) {
-                case 'currencyconverterapi' :
+        $this->app->singleton(Coinverter::class, function ($app) {
+            switch ($app->make('config')->get('coinverter.driver')) {
+                case 'currencyconverterapi':
                     return new CoinverterApiAdapter();
-                case 'exchangeratesapi' :
+                case 'exchangeratesapi':
                     return new ExchangeRatesApiAdapter();
                 default:
                     throw new \Exception('Invalid Coinverter driver.');
@@ -32,7 +32,7 @@ class CoinverterServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->publishes([dirname(__DIR__,1) . '/config/coinverter.php' => config_path('coinverter.php')]);
-        $this->mergeConfigFrom(dirname(__DIR__,1) . '/config/coinverter.php', 'coinverter');
+        $this->publishes([dirname(__DIR__, 1).'/config/coinverter.php' => config_path('coinverter.php')]);
+        $this->mergeConfigFrom(dirname(__DIR__, 1).'/config/coinverter.php', 'coinverter');
     }
 }
