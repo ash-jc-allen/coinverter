@@ -3,10 +3,13 @@
 namespace AshAllenDesign\Coinverter;
 
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
-use Carbon\Carbon;
+use Money\Formatter\DecimalMoneyFormatter;
+use Money\Currencies\ISOCurrencies;
 use GuzzleHttp\Client;
+use Carbon\Carbon;
+use Money\Money;
 
-class CoinverterApiAdapter implements Coinverter
+class CurrencyConverterApiAdapter implements Coinverter
 {
     /** @var string */
     private $API_KEY;
@@ -126,19 +129,21 @@ class CoinverterApiAdapter implements Coinverter
     }
 
     /**
-     * @param float       $value
+     * @param integer     $value
      * @param string      $from
      * @param string      $to
      * @param Carbon|null $date
      * @return float|int
      */
-    public function convert(float $value, string $from, string $to, Carbon $date = null)
+    public function convert(int $value, string $from, string $to, Carbon $date = null)
     {
-        return $value * $this->exchangeRate($from, $to, $date);
+        $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
+
+        return (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
     }
 
     /**
-     * @param float  $value
+     * @param int  $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
@@ -147,10 +152,11 @@ class CoinverterApiAdapter implements Coinverter
      * @return array
      * @throws \Exception
      */
-    public function convertBetweenDateRange(float $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
+    public function convertBetweenDateRange(int $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
     {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
-            $conversions[$date] = $value * $exchangeRate;
+            $result = Money::{$from}($value)->multiply($exchangeRate);
+            $conversions[$date] = (float) (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
 
         return $conversions;

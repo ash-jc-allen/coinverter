@@ -84,13 +84,13 @@ class ExchangeRatesApiAdapter implements Coinverter
     }
 
     /**
-     * @param string $value
+     * @param integer $value
      * @param string $from
      * @param string $to
      * @param Carbon|null $date
      * @return float|int
      */
-    public function convert(string $value, string $from, string $to, Carbon $date = null)
+    public function convert(int $value, string $from, string $to, Carbon $date = null)
     {
         $result = Money::{$to}($value)->multiply($this->exchangeRate($from, $to, $date));
 
@@ -98,7 +98,7 @@ class ExchangeRatesApiAdapter implements Coinverter
     }
 
     /**
-     * @param string $value
+     * @param integer $value
      * @param string $from
      * @param string $to
      * @param Carbon $date
@@ -107,12 +107,14 @@ class ExchangeRatesApiAdapter implements Coinverter
      * @return array
      * @throws \Exception
      */
-    public function convertBetweenDateRange(string $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
+    public function convertBetweenDateRange(int $value, string $from, string $to, Carbon $date, Carbon $endDate, array $conversions = [])
     {
         foreach ($this->exchangeRateBetweenDateRange($from, $to, $date, $endDate) as $date => $exchangeRate) {
             $result = Money::{$from}($value)->multiply($exchangeRate);
-            $conversions[$date] = (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
+            $conversions[$date] = (float) (new DecimalMoneyFormatter(new IsoCurrencies()))->format($result);
         }
+
+        ksort($conversions);
 
         return $conversions;
     }

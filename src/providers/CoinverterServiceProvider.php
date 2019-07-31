@@ -4,6 +4,7 @@ namespace AshAllenDesign\Coinverter\Providers;
 
 use AshAllenDesign\Coinverter\CoinverterApiAdapter;
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
+use AshAllenDesign\Coinverter\CurrencyConverterApiAdapter;
 use AshAllenDesign\Coinverter\ExchangeRatesApiAdapter;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,7 +20,7 @@ class CoinverterServiceProvider extends ServiceProvider
         $this->app->singleton(Coinverter::class, function ($app) {
             switch ($app->make('config')->get('coinverter.driver')) {
                 case 'currencyconverterapi':
-                    return new CoinverterApiAdapter();
+                    return new CurrencyConverterApiAdapter();
                 case 'exchangeratesapi':
                     return new ExchangeRatesApiAdapter();
                 default:
