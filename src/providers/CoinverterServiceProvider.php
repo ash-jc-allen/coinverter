@@ -2,7 +2,6 @@
 
 namespace AshAllenDesign\Coinverter\Providers;
 
-use AshAllenDesign\Coinverter\CoinverterApiAdapter;
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
 use AshAllenDesign\Coinverter\CurrencyConverterApiAdapter;
 use AshAllenDesign\Coinverter\ExchangeRatesApiAdapter;

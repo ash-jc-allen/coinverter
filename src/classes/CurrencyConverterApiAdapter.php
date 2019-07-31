@@ -3,10 +3,10 @@
 namespace AshAllenDesign\Coinverter;
 
 use AshAllenDesign\Coinverter\Contracts\Coinverter;
-use Money\Formatter\DecimalMoneyFormatter;
-use Money\Currencies\ISOCurrencies;
-use GuzzleHttp\Client;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
+use Money\Currencies\ISOCurrencies;
+use Money\Formatter\DecimalMoneyFormatter;
 use Money\Money;
 
 class CurrencyConverterApiAdapter implements Coinverter
@@ -129,7 +129,7 @@ class CurrencyConverterApiAdapter implements Coinverter
     }
 
     /**
-     * @param integer     $value
+     * @param int     $value
      * @param string      $from
      * @param string      $to
      * @param Carbon|null $date
